@@ -1,0 +1,206 @@
+.publication-page {
+  max-width: 1120px;
+  margin: auto;
+  padding: 0 28px 64px;
+}
+.publication-header {
+  padding: 48px 0 28px;
+  border-bottom: 1px solid var(--line);
+}
+.publication-header p {
+  margin: 0;
+  color: var(--dark);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.publication-header h1 {
+  margin: 6px 0;
+  font-size: clamp(34px, 5vw, 58px);
+  letter-spacing: -0.04em;
+}
+.publication-header span {
+  color: var(--muted);
+}
+.publication-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 26px;
+  margin-top: 28px;
+}
+.publication-layout aside {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+}
+.publication-layout aside h2 {
+  margin: 0 0 8px;
+}
+.publication-project {
+  text-align: left;
+  border: 1px solid var(--line);
+  padding: 11px;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.publication-project.active {
+  background: var(--turq);
+  border-color: var(--turq);
+}
+.publication-form,
+.publication-task {
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--line);
+  padding: 20px;
+  background: #fff;
+}
+.publication-form label,
+.publication-task label,
+.publication-columns label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.publication-form input,
+.publication-form textarea,
+.publication-form select,
+.publication-task input,
+.publication-task textarea,
+.publication-columns select {
+  min-height: 42px;
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  font: inherit;
+}
+.publication-form textarea,
+.publication-task textarea {
+  min-height: 82px;
+  resize: vertical;
+}
+.publication-check {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+}
+.publication-check input {
+  min-height: 0 !important;
+  padding: 0 !important;
+}
+.publication-page button {
+  width: max-content;
+  min-height: 38px;
+  padding: 9px 13px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: var(--turq);
+  font:
+    600 12px Roboto,
+    Arial,
+    sans-serif;
+  cursor: pointer;
+}
+.publication-page button:hover {
+  background: #000;
+  color: #fff;
+}
+.publication-page button:disabled {
+  opacity: 0.6;
+}
+.publication-secondary {
+  background: #fff !important;
+  border-color: var(--line) !important;
+  color: #222;
+}
+.publication-columns,
+.publication-tasks {
+  margin-top: 24px;
+}
+.publication-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.publication-columns h2,
+.publication-tasks h2 {
+  grid-column: 1/-1;
+  margin: 0;
+}
+.publication-task {
+  margin-top: 12px;
+}
+.publication-task small {
+  color: var(--muted);
+}
+.publication-message {
+  margin: 22px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.publication-news {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 38px;
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+.publication-news h2 {
+  margin-top: 0;
+}
+.publication-news-item {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+}
+.publication-news-item h3 {
+  margin: 5px 0;
+}
+.publication-news-item p,
+.publication-news-item small {
+  color: var(--muted);
+}
+.publication-skeleton {
+  display: grid;
+  gap: 12px;
+  padding-top: 48px;
+}
+.publication-skeleton i {
+  height: 100px;
+  background: linear-gradient(90deg, #eee, #fff, #eee);
+  background-size: 200% 100%;
+  animation: publication-pulse 1.2s infinite;
+}
+.publication-skeleton i:first-child {
+  height: 180px;
+}
+@keyframes publication-pulse {
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (max-width: 760px) {
+  .publication-page {
+    padding: 0 16px 44px;
+  }
+  .publication-layout,
+  .publication-news,
+  .publication-columns {
+    grid-template-columns: 1fr;
+  }
+  .publication-layout aside {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .publication-layout aside h2 {
+    grid-column: 1/-1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .publication-skeleton i {
+    animation: none;
+  }
+}

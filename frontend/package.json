@@ -1,0 +1,33 @@
+{
+  "name": "jornalzinho-frontend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "format": "prettier --write src vite.config.ts"
+  },
+  "dependencies": {
+    "axios": "1.20.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "react-flip-toolkit": "7.2.4",
+    "react-markdown": "10.1.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/mdast": "4.0.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.1.1",
+    "prettier": "3.9.8",
+    "typescript": "7.0.2",
+    "vite": "8.3.0",
+    "vitest": "5.0.1"
+  },
+  "engines": {
+    "node": ">=22.20.0 <23 || >=24.0.0"
+  }
+}

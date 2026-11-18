@@ -1,0 +1,109 @@
+name: public-preview-jornalzinho
+
+x-app-environment: &app-environment
+  POSTGRES_HOST: db
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: jornalzinho_public_preview
+  POSTGRES_USER: jornalzinho
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Execute scripts/setup.ps1 primeiro}
+  POSTGRES_SSLMODE: disable
+  JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Execute scripts/setup.ps1 primeiro}
+  JWT_ISSUER: jornalzinho
+  JWT_AUDIENCE: jornalzinho-api
+  APP_ORIGIN: http://127.0.0.1:8330
+  APP_ROOT_PATH: ""
+  SESSION_COOKIE_SECURE: "false"
+  ARQUIVO_DADOS: /dados/releases.json
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jornalzinho_public_preview
+      POSTGRES_USER: jornalzinho
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Execute scripts/setup.ps1 primeiro}
+    volumes:
+      - jornalzinho-public-data:/var/lib/postgresql/data
+    networks: [private]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jornalzinho -d jornalzinho_public_preview"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "3" }
+
+  app:
+    build: .
+    image: public-preview-jornalzinho:local
+    init: true
+    restart: unless-stopped
+    environment: *app-environment
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8330:8099"
+    networks: [private, edge]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+      - /dados:rw,noexec,nosuid,size=8m
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8099/health', timeout=5)"]
+      interval: 10s
+      timeout: 10s
+      start_period: 30s
+      retries: 12
+
+  migrate:
+    profiles: [setup]
+    image: public-preview-jornalzinho:local
+    environment: *app-environment
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["alembic", "upgrade", "head"]
+    networks: [private]
+    read_only: true
+    tmpfs:
+      - "/tmp:rw,noexec,nosuid,size=16m"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+  seed:
+    profiles: [setup]
+    image: public-preview-jornalzinho:local
+    environment:
+      <<: *app-environment
+      PUBLIC_PREVIEW_ALLOW_SETUP: "1"
+      ADMIN_CREDENTIAL_FILE: /run/secrets/admin_credentials
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ["python", "scripts/seed_public_preview.py"]
+    volumes:
+      - type: bind
+        source: ./.admin-credentials
+        target: /run/secrets/admin_credentials
+        read_only: true
+        bind: { create_host_path: false }
+    networks: [private]
+    read_only: true
+    tmpfs:
+      - "/tmp:rw,noexec,nosuid,size=16m"
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+
+networks:
+  private:
+    internal: true
+  edge:
+    driver: bridge
+
+volumes:
+  jornalzinho-public-data:
