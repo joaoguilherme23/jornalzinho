@@ -10,6 +10,10 @@ O Jornalzinho reúne um portal de notícias e acompanhamento de entregas com um 
 
 *Kanban do projeto fictício, com quatro tarefas — três ainda abertas.*
 
+![Área autenticada de Projetos com o projeto sintético Jornalzinho](docs/images/projetos.png)
+
+*Área de Projetos para localizar o projeto fictício e abrir seu acompanhamento.*
+
 ## Recursos
 
 - Portal público para consultar notícias, entregas publicadas, enviar solicitações e acompanhá-las.
